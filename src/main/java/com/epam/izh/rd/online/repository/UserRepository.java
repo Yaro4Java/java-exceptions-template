@@ -80,7 +80,7 @@ public class UserRepository implements IUserRepository {
         ((ArrayList)userDatabase).trimToSize();
     }
 
-    public String printInternalArray(){
+    public String printInternalList(){
         return userDatabase.toString();
     }
 
