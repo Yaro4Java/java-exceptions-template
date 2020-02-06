@@ -75,4 +75,22 @@ public class UserRepository implements IUserRepository {
 
         userDatabase.removeIf(user -> user.getLogin().equalsIgnoreCase(login));
     }
+
+    public void trimNullElementsOfTheInternalArrayOfTheList() {
+        ((ArrayList)userDatabase).trimToSize();
+    }
+
+    public String printInternalList(){
+        return userDatabase.toString();
+    }
+
+    public  void deleteByIndex( int index ){
+        if(index >= 0 && index < userDatabase.size() ) {
+            userDatabase.remove(index);
+        }
+    }
+
+    public int size(){
+        return userDatabase.size();
+    }
 }
