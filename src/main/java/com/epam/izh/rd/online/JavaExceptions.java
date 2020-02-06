@@ -71,7 +71,7 @@ public class JavaExceptions {
 
             System.out.println("\n7.Nikolai Stepanovich Goridze is trying to register...");
             try {
-                System.out.println("Result of login is: " +
+                System.out.println("Result of registration is: " +
                         userService.register(new User("Nikolai Stepanovich Goridze", "avas1")));
             } catch (NotCorrectPasswordException | UserAlreadyRegisteredException e) {
                 e.printStackTrace();
