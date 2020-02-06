@@ -1,6 +1,9 @@
 package com.epam.izh.rd.online.service;
 
 import com.epam.izh.rd.online.entity.User;
+import com.epam.izh.rd.online.exception.NotAccessException;
+import com.epam.izh.rd.online.exception.SimplePasswordException;
+import com.epam.izh.rd.online.exception.UserAlreadyRegisteredException;
 import com.epam.izh.rd.online.repository.IUserRepository;
 import com.epam.izh.rd.online.repository.UserRepository;
 
@@ -30,11 +33,20 @@ public class UserService implements IUserService {
      * @param user - данные регистрирующегося пользователя
      */
     @Override
-    public User register(User user) {
+    public User register(User user) throws UserAlreadyRegisteredException {
 
-        //
-        // Здесь необходимо реализовать перечисленные выше проверки
-        //
+        if(user.getLogin() == null || user.getPassword() == null ||
+           user.getLogin() == "" || user.getPassword() == ""){
+            throw new IllegalArgumentException("Ошибка в заполнении полей");
+        }
+
+        if(userRepository.findByLogin(user.getLogin()) != null){
+            throw new UserAlreadyRegisteredException("Пользователь с логином 'login' уже зарегистрирован");
+        }
+
+        if(user.getPassword().matches("\\d+")){
+            throw new SimplePasswordException("Пароль не соответствует требованиям безопасности");
+        }
 
         // Если все проверки успешно пройдены, сохраняем пользователя в базу
         return userRepository.save(user);
@@ -60,12 +72,11 @@ public class UserService implements IUserService {
      */
     public void delete(String login) {
 
-        // Здесь необходимо сделать доработку метода
-
-            userRepository.deleteByLogin(login);
-
-        // Здесь необходимо сделать доработку метода
-
+           try{
+               userRepository.deleteByLogin(login);
+           } catch (UnsupportedOperationException initialException) {
+               throw new NotAccessException("Недостаточно прав для выполнения операции", initialException);
+           }
     }
 
 }

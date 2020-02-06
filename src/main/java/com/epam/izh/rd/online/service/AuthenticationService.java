@@ -27,19 +27,19 @@ public class AuthenticationService implements IAuthenticationService {
      * @param user - пользователь проходящий авторизацию
      */
     @Override
-    public User login(User user) throws UserNotFoundException, NotCorrectPasswordException {
+    public User login(User user) throws UserNotFoundException {
         // Находим пользователя в базе
         User foundUser = userRepository.findByLogin(user.getLogin());
 
+        logout();
+
         // 1) Если пользователь не найден, выбрасывать проверяемое исключение с названием UserNotFoundException
         if (foundUser == null) {
-            logout();
             throw new UserNotFoundException("Пользователь с таким логином не найден");
         }
 
         // 2) Если пароли не совпадают, выбрасывать исключение с названием NotCorrectPasswordException
         if (!user.getPassword().equals(foundUser.getPassword())) {
-            logout();
             throw new NotCorrectPasswordException("Пароль введен неверно!");
         }
 

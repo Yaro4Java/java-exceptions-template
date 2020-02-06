@@ -93,4 +93,6 @@ public class UserRepository implements IUserRepository {
     public int size(){
         return userDatabase.size();
     }
+
+    public void clearResources() { userDatabase = null; }
 }

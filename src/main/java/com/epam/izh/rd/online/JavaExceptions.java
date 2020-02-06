@@ -3,10 +3,12 @@ package com.epam.izh.rd.online;
 
 import com.epam.izh.rd.online.entity.User;
 import com.epam.izh.rd.online.exception.NotCorrectPasswordException;
+import com.epam.izh.rd.online.exception.UserAlreadyRegisteredException;
 import com.epam.izh.rd.online.exception.UserNotFoundException;
 import com.epam.izh.rd.online.repository.UserRepository;
 import com.epam.izh.rd.online.service.AuthenticationService;
 import com.epam.izh.rd.online.service.CurrentUserManager;
+import com.epam.izh.rd.online.service.UserService;
 
 public class JavaExceptions {
 
@@ -58,13 +60,25 @@ public class JavaExceptions {
             }
             System.out.println("Current user is: " + CurrentUserManager.getCurrentLoggedInUser());
 
-            System.out.println("\n6.Styopa is trying to log in with wrong password...");
+            String regEx = "\\d+";
+            String chekedString = "123";
+            System.out.println("\n6.Regular expression is: \"" + regEx + "\"");
+            System.out.println("String \"" + chekedString + "\" is" + (!chekedString.matches(regEx) ?
+                    " not"
+                    : "") + " according to the above regular expression.");
+
+            UserService userService = new UserService(userRepository);
+
+            System.out.println("\n7.Nikolai Stepanovich Goridze is trying to register...");
             try {
-                System.out.println("Result of login is: " + authenticationService.login(new User("Styopa", "password")));
-            } catch (UserNotFoundException | NotCorrectPasswordException e) {
+                System.out.println("Result of login is: " +
+                        userService.register(new User("Nikolai Stepanovich Goridze", "avas1")));
+            } catch (NotCorrectPasswordException | UserAlreadyRegisteredException e) {
                 e.printStackTrace();
             }
             System.out.println("Current user is: " + CurrentUserManager.getCurrentLoggedInUser());
+
+
 
 
             System.out.println("\n***** END OF DEBUGGING USER REPOSITORY AND SERVICES *****\n");
